@@ -11,6 +11,7 @@ LCB_ROOMS = process.env.HUBOT_LCB_ROOMS.split(',')
 
 io = require('socket.io-client')
 url = require('url')
+proxy = require('socket.io-proxy')
 
 chatURL = url.format(
   protocol: LCB_PROTOCOL
@@ -38,6 +39,7 @@ class LCB extends Adapter
         'text': "@#{user.user.name} #{str}"
 
   run: ->
+    io = proxy if process.env.http_proxy
     @socket = io.connect chatURL
 
     @socket.on 'connect', =>
